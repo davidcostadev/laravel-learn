@@ -1,0 +1,29 @@
+
+version: '2'
+services:
+  mysqlserver:
+    image: mysql
+    ports:
+      - "3306:3306"
+    volumes: 
+      - ./mysql:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: 123
+
+  webserver:
+    image: davidcostadev/php56-apache2
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www
+    links:
+      - mysqlserver
+
+  myadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8000:80"
+    links:
+      - mysqlserver
+    environment: 
+      PMA_HOST: "172.18.0.2"
